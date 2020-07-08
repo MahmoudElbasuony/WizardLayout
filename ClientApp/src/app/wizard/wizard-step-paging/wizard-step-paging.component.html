@@ -1,0 +1,6 @@
+<div class="row mt-4">
+    <div class="col-12 d-flex justify-content-around">
+        <button [disabled]="!IsPreviousEnabled" class="btn btn-primary flex-column" (click)="onPreviousClick()">&lt;&lt; Previous</button>
+        <button [disabled]="!IsNextEnabled" class="btn btn-primary flex-column" (click)="onNextClick()">Next &gt;&gt;</button>
+    </div>
+</div>

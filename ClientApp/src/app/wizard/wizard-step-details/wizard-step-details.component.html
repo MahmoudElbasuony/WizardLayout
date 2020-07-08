@@ -1,0 +1,35 @@
+<div class="step-details-container mt-2 col-12" *ngIf="Step">
+
+  <!-- Add Item Button -->
+  <div class="row">
+    <div class="col-12">
+      <button class="btn btn-primary float-right mb-2 ml-auto " (click)="onAddItemClicked()">Add New Item</button>
+    </div>
+  </div>
+
+  <!-- Items List -->
+  <div class="row">
+    <div class="list-group col-12" *ngIf="Step.Items.length; else noItemsTemplate;">
+      <ng-container *ngFor="let stepItem of Step.Items; let i=stepItemIndex">
+        <app-wizard-step-item *ngIf="stepItem.Id" class="list-group-item" [StepItem]="stepItem" [ShowRemoveButton]="true"
+          RemoveButtonTooltip="Remove Item" (RemoveItemLinkClick)="onRemoveStepItemClicked($event)"
+          (ItemLinkClick)="onItemClicked($event)">
+        </app-wizard-step-item>
+      </ng-container>
+    </div>
+  </div>
+  <br>
+
+  <app-wizard-addedit-step-item [StepItem]="CurrentStepItem" *ngIf="CurrentStepItem"
+  (StepItemSaveClick)="onSaveStepItemClicked()"></app-wizard-addedit-step-item>
+
+  <ng-template #noItemsTemplate>
+    <div class="col-12 text-danger text-center">
+      No Items
+    </div>
+  </ng-template>
+
+
+
+
+</div>

@@ -1,0 +1,33 @@
+<form class="row" ref-saveStepItemForm="ngForm" (ngSubmit)="onSaveStepItemClick()" novalidate>
+  <div class="col-11">
+    <div class="form-group row">
+      <label for="itemName" class="col-sm-2 col-form-label">Name</label>
+      <div class="col-sm-10">
+        <input type="text" class="form-control" id="itemName" name="itemName" ref-itemName="ngModel"
+          [(ngModel)]="StepItem.Name" placeholder="Name" appRequiredString required>
+        <span *ngIf="itemName.dirty && !itemName.pristine && itemName.errors?.required" class="text-danger">Item name is required.</span>
+      </div>
+    </div>
+    <div class="form-group row">
+      <label for="itemTitle" class="col-sm-2 col-form-label">Title</label>
+      <div class="col-sm-10">
+        <input type="text" class="form-control" id="itemTitle" name="itemTitle" ref-itemTitle="ngModel"
+          [(ngModel)]="StepItem.Title" placeholder="Title" appRequiredString required>
+        <span *ngIf="itemTitle.dirty && !itemTitle.pristine && itemTitle.errors?.required" class="text-danger">Item title is required.</span>
+      </div>
+    </div>
+    <div class="form-group row">
+      <label for="itemDescription" class="col-sm-2 col-form-label">Description</label>
+      <div class="col-sm-10">
+        <input class="form-control" id="itemDescription" name="itemDescription" ref-itemDescription="ngModel"
+          [(ngModel)]="StepItem.Description" placeholder="Description" appRequiredString required>
+        <span *ngIf="itemDescription.dirty && !itemDescription.pristine && itemDescription.errors?.required" class="text-danger">Item description is
+          required.</span>
+      </div>
+    </div>
+  </div>
+  <div class="col-1 d-flex">
+    <button type="submit" id="saveStepItemBtn" [disabled]="saveStepItemForm.pristine || saveStepItemForm.invalid"
+      class="btn btn-sm btn-primary align-self-center">Save</button>
+  </div>
+</form>

@@ -1,0 +1,7 @@
+<button title="{{TooltipText}}"
+  class="bg-primary page-link text-white text-center flex-column p-3 mr-2 rounded step-link"
+  (click)="onStepClick()">
+  {{Title}}
+  <i *ngIf="ShowRemoveButton" title="{{RemoveButtonTooltip}}" class="badge badge-primary"
+    (click)="onRemoveStepClick($event)">-</i>
+</button>

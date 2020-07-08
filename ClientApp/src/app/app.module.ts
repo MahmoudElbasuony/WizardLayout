@@ -7,25 +7,35 @@ import { RouterModule } from '@angular/router';
 import { AppComponent } from './app.component';
 import { NavMenuComponent } from './nav-menu/nav-menu.component';
 import { HomeComponent } from './home/home.component';
-import { CounterComponent } from './counter/counter.component';
-import { FetchDataComponent } from './fetch-data/fetch-data.component';
+import { WizardComponent } from './wizard/wizard.component';
+import { WizardStepBarComponent } from './wizard/wizard-step-bar/wizard-step-bar.component';
+import { WizardStepBarLinkComponent } from './wizard/wizard-step-bar-link/wizard-step-bar-link.component';
+import { WizardStepDetailsComponent } from './wizard/wizard-step-details/wizard-step-details.component';
+import { WizardStepItemComponent } from './wizard/wizard-step-item/wizard-step-item.component';
+import { EmptyStringValidatorDirective } from './directives/empty-string.validator';
+import { WizardAddeditStepItemComponent } from './wizard/wizard-addedit-step-item/wizard-addedit-step-item.component';
+import { WizardStepPagingComponent } from './wizard/wizard-step-paging/wizard-step-paging.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     NavMenuComponent,
     HomeComponent,
-    CounterComponent,
-    FetchDataComponent
+    WizardComponent,
+    WizardStepBarComponent,
+    WizardStepBarLinkComponent,
+    WizardStepDetailsComponent,
+    WizardStepItemComponent,
+    EmptyStringValidatorDirective,
+    WizardAddeditStepItemComponent,
+    WizardStepPagingComponent
   ],
   imports: [
-    BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
+    BrowserModule,
     HttpClientModule,
     FormsModule,
     RouterModule.forRoot([
       { path: '', component: HomeComponent, pathMatch: 'full' },
-      { path: 'counter', component: CounterComponent },
-      { path: 'fetch-data', component: FetchDataComponent },
     ])
   ],
   providers: [],

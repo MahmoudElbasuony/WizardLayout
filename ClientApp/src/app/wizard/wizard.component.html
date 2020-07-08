@@ -1,0 +1,11 @@
+<div class="container">
+  <!-- Wizard Step Bar -->
+  <app-wizard-step-bar class="row" [Steps]="Steps" (OnAddStepClick)="onAddStepClicked()" (OnRemoveStepClick)="onRemoveStepClicked($event)"
+    (OnStepClick)="onStepClicked($event)" class="row"></app-wizard-step-bar>
+
+  <!-- Wizard Step Details Container -->
+  <app-wizard-step-details class="row" *ngIf="CurrentStep" [Step]="CurrentStep" class="row"></app-wizard-step-details>
+
+  <!-- Steps Paging -->
+  <app-wizard-step-paging [StepsCount]="Steps.length" [CurrentStepIndex]="CurrentStepIndex" (OnPreviousClick)="onStepPageClicked($event)" (OnNextClick)="onStepPageClicked($event)"></app-wizard-step-paging>
+</div>

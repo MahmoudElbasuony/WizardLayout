@@ -1,5 +1,4 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { EntityMode } from 'src/app/models/enums';
 
 @Component({
   selector: 'app-wizard-step-bar-link',
@@ -18,12 +17,17 @@ export class WizardStepBarLinkComponent implements OnInit {
   ShowRemoveButton: boolean;
   @Input()
   RemoveButtonTooltip: string;
+  @Input()
+  SelectedStepId : string;
 
   @Output()
   StepLinkClick: EventEmitter<string> = new EventEmitter<string>();
   @Output()
   RemoveStepLinkClick: EventEmitter<string> = new EventEmitter<string>();
 
+  public get IsActive(){
+    return this.Id === this.SelectedStepId;
+  }
 
   constructor() {
 

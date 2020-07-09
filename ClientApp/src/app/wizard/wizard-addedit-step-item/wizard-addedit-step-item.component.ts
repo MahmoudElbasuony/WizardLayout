@@ -20,14 +20,15 @@ export class WizardAddeditStepItemComponent implements OnInit {
   private _saveForm: NgForm;
 
   constructor() {
-    
+
   }
 
   ngOnInit() {
+
   }
 
   resetSaveForm() {
-    this._saveForm.resetForm();
+    this._saveForm.resetForm()
   }
 
   onSaveStepItemClick() {

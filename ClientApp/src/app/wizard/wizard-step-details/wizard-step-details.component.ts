@@ -1,15 +1,15 @@
-import { Component, OnInit, Input, ViewChild, AfterViewInit } from '@angular/core';
+import { Component, OnInit, Input, ViewChild, AfterViewInit, OnChanges, SimpleChanges } from '@angular/core';
 import { WizardStep } from '../../models/wizard-step.model';
 import { WizardStepItem } from '../../models/wizard-step-item.model';
-import { SimulateAsync } from '../../utilities/simulation';
 import { WizardAddeditStepItemComponent } from '../wizard-addedit-step-item/wizard-addedit-step-item.component';
+import { WizardStepItemService } from '../../services/wizard-step-item.service';
 
 @Component({
   selector: 'app-wizard-step-details',
   templateUrl: './wizard-step-details.component.html',
   styleUrls: ['./wizard-step-details.component.css']
 })
-export class WizardStepDetailsComponent implements OnInit {
+export class WizardStepDetailsComponent implements OnChanges, OnInit {
 
   @Input()
   public Step: WizardStep;
@@ -19,12 +19,16 @@ export class WizardStepDetailsComponent implements OnInit {
   private _addEditStepItemComponent: WizardAddeditStepItemComponent;
 
 
-  constructor() {
+  constructor(private stepItemService: WizardStepItemService) {
 
   }
 
-  ngOnInit() {
+  ngOnChanges(changes: SimpleChanges): void {
     this.setInitialSelectedItem();
+  }
+
+  ngOnInit() {
+
   }
 
   onAddItemClicked() {
@@ -42,23 +46,31 @@ export class WizardStepDetailsComponent implements OnInit {
       if (this._addEditStepItemComponent) {
         this._addEditStepItemComponent.resetSaveForm();
       }
-      this.CurrentStepItem = { ...matchedStepItem };
+      setTimeout(() => { this.CurrentStepItem = { ...matchedStepItem }; }, 0);
     }
   }
 
   onRemoveStepItemClicked(stepItemId: string) {
     if (confirm(`Are you sure you want to remove this step item ?`)) {
-      SimulateAsync(stepItemId, (siid) => this.onStepItemRemoved(siid));
+      this.stepItemService.deleteStepItem(stepItemId).subscribe((si) => this.onStepItemRemoved(si));
     }
   }
 
   onSaveStepItemClicked() {
     const isAdd = !this.CurrentStepItem.Id;
-    SimulateAsync(this.CurrentStepItem, (si) => this.onStepItemSaved(si, isAdd));
+    if (isAdd) {
+      this.stepItemService.createStepItem(this.Step.Id, this.CurrentStepItem).subscribe((si) => this.onStepItemSaved(si, isAdd));
+    } else {
+      this.stepItemService.updateStepItem(this.CurrentStepItem).subscribe((si) => this.onStepItemSaved(si, isAdd));
+    }
   }
 
   onStepItemSaved(savedStepItem: WizardStepItem, isAdd: boolean) {
-    savedStepItem.Id = isAdd ? Date.now().toString() : savedStepItem.Id;
+
+    if (isAdd) {
+      this.Step.Items.push(savedStepItem);
+    }
+
     const { matchedStepItem, matchedStepItemIndex } = this.getLocalStepItemInfo(savedStepItem.Id);
     if (matchedStepItemIndex >= 0) {
       // update required properities 
@@ -68,11 +80,12 @@ export class WizardStepDetailsComponent implements OnInit {
       matchedStepItem.Description = savedStepItem.Description;
       alert(`Step item : ${matchedStepItem.Name} has been ${isAdd ? 'saved' : 'updated'} successfully .`);
       this.CurrentStepItem = null;
+
     }
   }
 
-  private onStepItemRemoved(stepItemId: string) {
-    const { matchedStepItem, matchedStepItemIndex } = this.getLocalStepItemInfo(stepItemId);
+  private onStepItemRemoved(stepItem: WizardStepItem) {
+    const { matchedStepItem, matchedStepItemIndex } = this.getLocalStepItemInfo(stepItem.Id);
     if (matchedStepItemIndex >= 0) {
       if (matchedStepItem.Id === this.CurrentStepItem.Id) {
         this.CurrentStepItem = null;
@@ -85,8 +98,6 @@ export class WizardStepDetailsComponent implements OnInit {
   private setInitialSelectedItem() {
     if (this.Step.Items.length > 0) {
       this.CurrentStepItem = { ...this.Step.Items[0] };
-    } else {
-      this.onAddItemClicked();
     }
   }
 

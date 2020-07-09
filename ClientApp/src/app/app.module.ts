@@ -15,6 +15,9 @@ import { WizardStepItemComponent } from './wizard/wizard-step-item/wizard-step-i
 import { EmptyStringValidatorDirective } from './directives/empty-string.validator';
 import { WizardAddeditStepItemComponent } from './wizard/wizard-addedit-step-item/wizard-addedit-step-item.component';
 import { WizardStepPagingComponent } from './wizard/wizard-step-paging/wizard-step-paging.component';
+import { WizardStepService } from './services/wizard-step.service';
+import { WizardStepItemService } from './services/wizard-step-item.service';
+import { HttpErrorInterceptor } from './http.interceptor';
 
 @NgModule({
   declarations: [
@@ -38,7 +41,15 @@ import { WizardStepPagingComponent } from './wizard/wizard-step-paging/wizard-st
       { path: '', component: HomeComponent, pathMatch: 'full' },
     ])
   ],
-  providers: [],
+  providers: [
+    WizardStepService,
+    WizardStepItemService,
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: HttpErrorInterceptor,
+      multi: true
+    }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

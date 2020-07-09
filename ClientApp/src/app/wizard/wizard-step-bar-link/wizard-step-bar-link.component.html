@@ -1,5 +1,6 @@
 <button title="{{TooltipText}}"
-  class="bg-primary page-link text-white text-center flex-column p-3 mr-2 rounded step-link"
+  class="page-link  text-center flex-column p-3 mr-2 rounded step-link"
+  [ngClass]="{'text-reverse bg-white': IsActive , 'text-white bg-primary' : !IsActive}"
   (click)="onStepClick()">
   {{Title}}
   <i *ngIf="ShowRemoveButton" title="{{RemoveButtonTooltip}}" class="badge badge-primary"

@@ -1,7 +1,7 @@
 <div class="col-12 d-flex justify-content-center">
 
   <!-- Steps -->
-  <app-wizard-step-bar-link *ngFor="let step of Steps; let i=stepIndex" [Title]="step.Title" [Id]="step.Id"
+  <app-wizard-step-bar-link  *ngFor="let step of Steps; let i=stepIndex" [SelectedStepId]="SelectedStepId" [Title]="step.Title" [Id]="step.Id"
     [TooltipText]="step.Title" [ShowRemoveButton]='true' RemoveButtonTooltip="Remove Step"
     (StepLinkClick)="onStepLinkClicked($event)" (RemoveStepLinkClick)="onRemoveStepClicked($event)">
   </app-wizard-step-bar-link>

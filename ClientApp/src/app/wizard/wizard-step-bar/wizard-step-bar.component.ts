@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, OnChanges, SimpleChanges } from '@angular/core';
 import { WizardStep } from '../../models/wizard-step.model';
 
 @Component({
@@ -10,6 +10,9 @@ export class WizardStepBarComponent implements OnInit {
 
   @Input()
   Steps: WizardStep[];
+  @Input()
+  SelectedStepId: string;
+
 
   @Output()
   OnAddStepClick: EventEmitter<void> = new EventEmitter<void>();
@@ -17,6 +20,7 @@ export class WizardStepBarComponent implements OnInit {
   OnRemoveStepClick: EventEmitter<string> = new EventEmitter<string>();
   @Output()
   OnStepClick: EventEmitter<string> = new EventEmitter<string>();
+
 
   constructor() {
     this.Steps = [];
@@ -27,6 +31,7 @@ export class WizardStepBarComponent implements OnInit {
   }
 
   onStepLinkClicked(stepId: string) {
+    this.SelectedStepId = stepId;
     this.OnStepClick.emit(stepId);
   }
 

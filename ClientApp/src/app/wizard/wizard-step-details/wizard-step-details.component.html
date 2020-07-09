@@ -20,7 +20,7 @@
   </div>
   <br>
 
-  <app-wizard-addedit-step-item [StepItem]="CurrentStepItem" *ngIf="CurrentStepItem"
+  <app-wizard-addedit-step-item [StepItem]="CurrentStepItem" *ngIf="CurrentStepItem && Step.Items.length"
   (StepItemSaveClick)="onSaveStepItemClicked()"></app-wizard-addedit-step-item>
 
   <ng-template #noItemsTemplate>

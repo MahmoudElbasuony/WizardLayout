@@ -1,7 +1,7 @@
 import { Component, OnInit, Inject } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
 import { WizardStep } from '../models/wizard-step.model';
 import { SimulateAsync } from '../utilities/simulation';
+import { WizardStepService } from '../services/wizard-step.service';
 
 @Component({
   selector: 'app-wizard',
@@ -16,11 +16,12 @@ export class WizardComponent implements OnInit {
     return this.Steps.indexOf(this.CurrentStep);
   }
 
-  constructor(http: HttpClient, @Inject('BASE_URL') baseUrl: string) {
+  constructor(private stepService: WizardStepService) {
     this.Steps = [];
   }
 
   ngOnInit() {
+    this.stepService.getSteps().subscribe(steps => this.Steps = steps);
   }
 
   onAddStepClicked() {
@@ -32,21 +33,22 @@ export class WizardComponent implements OnInit {
       return;
     }
 
-    this.initiateNewStep(stepName);
+    this.stepService.createStep(stepName).subscribe(s => {
+      this.Steps.push(s);
+      this.CurrentStep = s;
+    });
+
   }
 
   onRemoveStepClicked(stepId: string) {
     if (confirm(`Are you sure you want to remove this step ?`)) {
-      SimulateAsync(stepId, (sid) => this.onStepRemoved(sid));
+      this.stepService.deleteStep(stepId).subscribe(s => this.onStepRemoved(s));
     }
   }
 
 
   onStepClicked(stepId: string) {
-    const { matchedStep } = this.getLocalStepInfo(stepId);
-    if (matchedStep) {
-      this.CurrentStep = matchedStep;
-    }
+    this.stepService.getStep(stepId).subscribe(s => this.onStepInfoReterived(s));
   }
 
   onStepPageClicked(stepIndex: number) {
@@ -54,17 +56,16 @@ export class WizardComponent implements OnInit {
     this.CurrentStep = step;
   }
 
-
-  private initiateNewStep(stepName: string) {
-    const newStep = new WizardStep(stepName);
-    newStep.Id = Date.now().toString();
-    this.Steps.push(newStep);
-    this.CurrentStep = newStep;
+  onStepInfoReterived(step: WizardStep) {
+    const { matchedStep, matchedStepIndex } = this.getLocalStepInfo(step.Id);
+    if (matchedStep) {
+      matchedStep.Items = [...step.Items];
+      this.CurrentStep = matchedStep;
+    }
   }
 
-
-  private onStepRemoved(stepId: string) {
-    const { matchedStep, matchedStepIndex } = this.getLocalStepInfo(stepId);
+  private onStepRemoved(step: WizardStep) {
+    const { matchedStep, matchedStepIndex } = this.getLocalStepInfo(step.Id);
     if (matchedStepIndex >= 0) {
       if (matchedStep === this.CurrentStep) {
         this.CurrentStep = null;
